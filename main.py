@@ -32,14 +32,14 @@ def main():
     # ---- Run MultiNest ---- #
     print("\n[MM]: Running PyMultiNest... this may take a bit.\n")
     pymultinest.run(
-        loglike.gaussian_loglike,       # Log likelihood
+        loglike.gaussian_loglike_covmat,       # Log likelihood
         loglike.prior_transform,        # Prior transform
         n_dims=2,                       # Dimensionality of parameter space
         outputfiles_basename=basename,  # Basename for output files
         n_live_points=1000,             # Number of live points
         verbose=True,                   # Verbose
-        seed=-1,                        # Sampling seed
-        resume=False,                   # Resume (continue from a previous sampling question mark)
+        seed=24,                        # Sampling seed
+        resume=False,                   # Resume (continue from a previous sampling)
     )
     print(f"[MM]: Finished running PyMultiNest.")
     
@@ -57,10 +57,11 @@ def main():
     
     # ---- Run ESG Analyzer ---- #
     anal.contour_plot(posterior_samples) # Generate contour plot
-    anal.contour_plot_3D(posterior_samples)
     
     anal.corner_plot(posterior_samples)
     anal.one_d_marginals(posterior_samples)
+    
+    anal.goodness_of_fit(posterior_samples)
     
 # ---- Run Main ---- #
 if __name__ == "__main__":

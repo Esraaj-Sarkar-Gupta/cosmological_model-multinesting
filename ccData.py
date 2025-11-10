@@ -57,22 +57,25 @@ for i in range(N):
 z = _DATA[:, 0]
 H = _DATA[:, 1]
 
+# Convert percentages to fractions
 imf_intp    = np.interp(z, zmod, imf)/100
 slib_intp   = np.interp(z, zmod, slib)/100
 sps_intp    = np.interp(z, zmod, sps)/100
 spsooo_intp = np.interp(z, zmod, spsooo)/100
 
+# Initialise covmats
 covmat_imf     = np.zeros((N,N), dtype='float64')
 covmat_slib    = np.zeros((N,N), dtype='float64')
 covmat_sps     = np.zeros((N,N), dtype='float64')
 covmat_spsooo  = np.zeros((N,N), dtype='float64')
 
+# Populate covmats
 for i in range(len(z)):
 	for j in range(len(z)):
-		covmat_imf[i,j]      = H[i] * imf_intp[i] * H[j] * imf_intp[j]
-		covmat_slib[i,j]     = H[i] * slib_intp[i] * H[j] * slib_intp[j]
-		covmat_sps[i,j]      = H[i] * sps_intp[i] * H[j] * sps_intp[j]
-		covmat_spsooo[i,j]   = H[i] * spsooo_intp[i] * H[j] * spsooo_intp[j]
+		covmat_imf[i,j]      = H[i] * imf_intp[i]     * H[j] * imf_intp[j]
+		covmat_slib[i,j]     = H[i] * slib_intp[i]    * H[j] * slib_intp[j]
+		covmat_sps[i,j]      = H[i] * sps_intp[i]     * H[j] * sps_intp[j]
+		covmat_spsooo[i,j]   = H[i] * spsooo_intp[i]  * H[j] * spsooo_intp[j]
         
 # Build the final covariance matrix
 _COVMAT = covmat_diag + covmat_imf + covmat_spsooo

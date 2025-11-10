@@ -76,7 +76,7 @@ class data:
     # ---- ----
     
     def get_number_of_parameters(self) -> int :
-        return len(self.parameters)
+        return len(self.param_names)
         
     
     

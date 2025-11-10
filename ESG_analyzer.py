@@ -56,7 +56,7 @@ def posterior_mean(posterior: np.ndarray) -> np.ndarray :
 
 def posterior_std_deviation(posterior : np.ndarray) -> np.ndarray :
     model_data = model.getData()
-    nparam = model_data.get_number_of_parameters()()
+    nparam = model_data.get_number_of_parameters()
     
     stds = list([])
     
@@ -72,6 +72,9 @@ def goodness_of_fit(posterior : np.ndarray, verbose : bool = True) -> np.ndarray
     chi2_best = -2 * loglikes[best_index]
     
     best_fit_array = np.append(best_fit, chi2_best)
+    
+    if (verbose == True):
+        print(f"[ESG_ANALYSIS]: Best fit array = {best_fit_array}.")
     
     return best_fit_array
 
@@ -91,16 +94,69 @@ def contour_plot(posterior : np.ndarray) -> bool :
         raise IndexError("[ESG_ANALYSIS]: Contour plot failed to generate -- parameter list must be two-dimensional!")
     model_name = model_data.model_name
     
+    param1, param2, logL = posterior[:,0], posterior[:,1], posterior[:,2]
+    
+    best_fit = goodness_of_fit(posterior, False)
+    
+    mean1, mean2 = posterior_mean(posterior)
+
+    
+    
+    x_lims = (min(param1) - mean1/2, max(param1) + mean1/2)
+    y_lims = (min(param2) - mean2/2, max(param2) + mean2/2)
+    
+    print(mean1, mean2)
+    
+    
     # ---- Begin Plot ---- #
     plt.figure(figsize=(10,12))
-    param1, param2, logL = posterior[:,0], posterior[:,1], posterior[:,2]
+   
     sc = plt.scatter(param1, param2, c=logL, cmap='viridis', s=12, alpha=0.8, edgecolors='none')
+    
+    plt.scatter(mean1, mean2, c='black', s=20, alpha=0.5)
+    plt.scatter(best_fit[0], best_fit[1], c='red', s=25, alpha=0.8)
+    
+    plt.plot([x_lims[0], x_lims[1]], [mean2, mean2], color='black', alpha=0.5, linestyle='--')
+    plt.plot([mean1, mean1], [y_lims[0], y_lims[1]], color='black', alpha=0.5, linestyle='--')
+    
+    plt.plot([x_lims[0], x_lims[1]], [best_fit[1], best_fit[1]], color='red', alpha=0.8)
+    plt.plot([best_fit[0], best_fit[0]], [y_lims[0], y_lims[1]], color='red', alpha=0.8)
+    
+    
     
     plt.xlabel(parameter_names[0])
     plt.ylabel(parameter_names[1])
+    
+    plt.xlim(x_lims[0], x_lims[1])
+    plt.ylim(y_lims[0], y_lims[1])
         
     plt.title(f"Posterior samples contour plot for {model_name} model of the universe.")
     plt.colorbar(sc, label="log-likelihood")
+    
+    # === Annotate coordinates on axes ===
+    # Format to 3 significant figures
+    fmt = lambda x: f"{x:.3f}"
+    
+    # Text offsets (in data units or relative fraction)
+    x_offset = 0.02 * (x_lims[1] - x_lims[0])
+    y_offset = 0.02 * (y_lims[1] - y_lims[0])
+    
+    # Label mean position
+    plt.text(
+        mean1 + x_offset, y_lims[0] + 0.02*(y_lims[1]-y_lims[0]),
+        f"mean = ({fmt(mean1)}, {fmt(mean2)})",
+        color="black", fontsize=11, weight="bold",
+        ha="left", va="bottom"
+    )
+    
+    # Label best-fit position
+    plt.text(
+        best_fit[0] + x_offset, y_lims[0] + 0.08*(y_lims[1]-y_lims[0]),
+        f"best = ({fmt(best_fit[0])}, {fmt(best_fit[1])})",
+        color="red", fontsize=11, weight="bold",
+        ha="left", va="bottom"
+    )
+        
     plt.tight_layout()
     
     # Save Plot
@@ -162,7 +218,7 @@ def corner_plot(posterior: np.ndarray) -> bool :
     parameter_names = model_data.param_names
     model_name = model_data.model_name
     
-    best_fit = goodness_of_fit(posterior)
+    best_fit = goodness_of_fit(posterior, False)
     
     fig = corner.corner(
     posterior[:,:-1],
