@@ -7,6 +7,11 @@ Created Oct 2025
 @author: Esraaj
 
 Flat LCDM constraints from 32 CC H(z) data using PyMultiNest.
+Dependencies:
+    > data (ccData) -- import data
+    > model (LCDM) -- import model
+    > loglike (loglike) -- mathematical tools (Bayesian Likelihoods)
+    > ESG_Analyzer (ESG_Analyzer) -- non-native analyzer
 """
 
 import time

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+ESG_analyzer.py
+
 Created Nov 2025
 @author: esraaj
 
@@ -8,13 +10,17 @@ Non-native pyMultiNest Analyzer.
 
 Functions available:
     ** Statistical Values **
-    > posterior_mean @return posterior mean
-    > posterior_std_deviation (Posterior standard deviation) @return 
+    > posterior_mean @return posterior means vector
+    > posterior_std_deviation (Posterior standard deviation) @return posterior standard deviations vector
     > goodness_of_fit @returns best fit vector
+    
     ** Data Visualisation **
     > contour_plot (for 2D parameter space)
     > contour_plot_3D (3D contour plot -- I would say this is a very useless function)
-    >
+    > corner_plot -- Generate corner plots (You will find this the most useful in higher dimensions)
+    > one_d_marginals -- Marginal plots for each parameter
+    
+Markup label support for figures has not been added yet.
 """
 
 import numpy as np
@@ -343,11 +349,3 @@ def one_d_marginals(posterior: np.ndarray) -> bool:
           f"({len(posterior)} samples). Saved.")
 
     return 0
-
-
-"""
-Things to be done:
-    > Need to add label support instead of name support
-    > Better memory management.
-    > UnGPT the last function
-"""

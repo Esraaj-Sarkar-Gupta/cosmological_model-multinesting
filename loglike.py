@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+loglike.py
+
 Created Oct 2025
 @author: Esraaj Sarkar Gupta
 
+This file contains the mathematical tools used in this project.
+
 Functions:
     > Guassian (diagonal) likelihood
-    > Gaussian (covariance matrix) likelihood (INCOMPLETE)
-    > Uniform prior transform
+    > Gaussian (covariance matrix) likelihood -- as of now does not use Cholesky matrices
+    
+    > Uniform prior transform -- Mirrors the function in the `model` module.
 """
 
 import numpy as np
