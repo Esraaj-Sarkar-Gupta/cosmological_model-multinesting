@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+ccData.py
+
 Created Oct 2025
 @author: Esraaj Sarkar Gupta
 
-Cosmological model multinesting: data.py
+Data is imported from files (paths defined below).
+    > path_data expects CC data in the form [z, Hz, std_dev]
+    > path_bias expects CC bias data in the form of z, IMF, SLIB, SPS, SPSOOO (results of Moresco et. al. 2020)
 
-data.py imports data from cosmological databases.
+
+
+Cite: Setting the Stage for Cosmic Chronometers II. Impact of Stellar Population
+Synthesis Models Systematics and Full Covariance Matrix -- Moresco et. al. 2020
+Cite: https://github.com/Ahmadmehrabi/Cosmic_chronometer_data
 """
 import numpy as np
 import os
@@ -18,7 +26,7 @@ path_data = pwd + "/ccData/HzTable_MM_BC32.txt"
 path_bias = pwd + "/ccData/data_MM20.dat"
 
 _DATA = np.genfromtxt(path_data) # Extract CC data
-zmod, imf, slib, sps, spsooo = np.genfromtxt(path_bias, comments='#', usecols=(0,1,2,3,4), unpack=True) # Extract bias data
+zmod, imf, slib, sps, spsooo = np.genfromtxt(path_bias, comments='#', usecols=(0,1,2,3,4), unpack=True)  # Get results from Moresco et. al. 2020
 
 
 #z = data[:,0]
@@ -82,6 +90,9 @@ _COVMAT = covmat_diag + covmat_imf + covmat_spsooo
 
 # ---- Data Object ---- #
 class CC:
+    """
+    Data is packaged into a callable object.
+    """
     def __init__(self, data: np.ndarray, covmat: np.ndarray):
         self.data    = np.array(data, dtype=float)
         self.z          = self.data[:, 0]
@@ -90,7 +101,7 @@ class CC:
         self.covmat     = covmat
 
 def getCCData() -> CC:
-    print(f"[MM_DAT]: 32CC Data loaded into object CC.")
+    print(f"[MM_DAT]: 32CC Data loaded into data object.")
     return CC(_DATA, _COVMAT)
     
 

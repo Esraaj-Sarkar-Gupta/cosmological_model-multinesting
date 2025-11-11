@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+LCDM.py
+
 Created Oct 2025
 @author: Esraaj Sarkar Gupta
 
@@ -8,9 +10,12 @@ Cosmological model multinesting: LCDM.py
 This file holds relavant functions for the Lambda CDM
 model of the universe.
 
-Functions available:
+Cosmological Functions:
     > Hubble parameter from the matter-dominated epoch
-    > Uniform prior transform limits (dict)
+    
+Module Functions:
+    > Uniform prior transform limits (dict) -- exported to pyMultiNest via loglike.py
+    > data class -- Callable object to export data
     
 All variables of the form _VARIABLE_NAME are editable.
 """
@@ -53,6 +58,12 @@ def prior_transform(cube):
 # ===============
 # Data Structure
 # ===============
+"""
+Model parameters are packaged into a callable object.
+
+This object is used in generating figures in the
+analysis module ESG_analyzer.py
+"""
 class data:
     def __init__(self, model_name, parameters, prior_dict):
         self.model_name = model_name
@@ -88,4 +99,7 @@ def getData() -> data:
 
 def primary_function(free_parameter, constraint_parameters):
     Hz(free_parameter, constraint_parameters)
+    
+def secondary_function() -> None:
+    return None # No secondary funtion defined in this module
     

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+main.py
+
 Created Oct 2025
 @author: Esraaj
 
-Flat ΛCDM constraints from 32 CC H(z) data using PyMultiNest.
+Flat LCDM constraints from 32 CC H(z) data using PyMultiNest.
 """
 
 import time
@@ -32,7 +34,7 @@ def main():
     # ---- Run MultiNest ---- #
     print("\n[MM]: Running PyMultiNest... this may take a bit.\n")
     pymultinest.run(
-        loglike.gaussian_loglike_covmat,       # Log likelihood
+        loglike.gaussian_loglike,       # Log likelihood
         loglike.prior_transform,        # Prior transform
         n_dims=2,                       # Dimensionality of parameter space
         outputfiles_basename=basename,  # Basename for output files

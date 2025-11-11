@@ -13,7 +13,7 @@ Functions available:
     > goodness_of_fit @returns best fit vector
     ** Data Visualisation **
     > contour_plot (for 2D parameter space)
-    >
+    > contour_plot_3D (3D contour plot -- I would say this is a very useless function)
     >
 """
 
@@ -28,7 +28,7 @@ import ccData as data
 
 # ---- Results Directory ----
 
-_ANAL_RESULT_DIR = "./ESG_analyzer/" # <-- Do not forget these slashes
+_ANAL_RESULT_DIR = "./ESG_analyzer_nocovmat/" # <-- Do not forget these slashes
 
 # ---- Helpers ---- #
 def saveDir(dir_name : str) -> str:
@@ -43,7 +43,10 @@ def saveDir(dir_name : str) -> str:
 # Useful Statistical Values
 # =========================
 
-def posterior_mean(posterior: np.ndarray) -> np.ndarray :
+def posterior_means(posterior: np.ndarray) -> np.ndarray :
+    """
+    @returns: a numpy array of the posterior means of each parameter sampled.
+    """
     model_data = model.getData()
     nparam = model_data.get_number_of_parameters()
     
@@ -54,7 +57,10 @@ def posterior_mean(posterior: np.ndarray) -> np.ndarray :
         
     return np.array(means)
 
-def posterior_std_deviation(posterior : np.ndarray) -> np.ndarray :
+def posterior_std_deviations(posterior : np.ndarray) -> np.ndarray :
+    """
+    @returns: a numpy array of the posterior standard deviations of each parameter sampled.
+    """
     model_data = model.getData()
     nparam = model_data.get_number_of_parameters()
     
@@ -66,6 +72,10 @@ def posterior_std_deviation(posterior : np.ndarray) -> np.ndarray :
     return np.array(stds)
 
 def goodness_of_fit(posterior : np.ndarray, verbose : bool = True) -> np.ndarray :
+    """
+    @returns: a numpy array of the best fit values of each parameter, along with the highiest likelihood
+              among the posterior samples.
+    """
     loglikes = posterior[:,-1]
     best_index = np.argmax(loglikes)
     best_fit = posterior[best_index, :-1]
@@ -98,7 +108,7 @@ def contour_plot(posterior : np.ndarray) -> bool :
     
     best_fit = goodness_of_fit(posterior, False)
     
-    mean1, mean2 = posterior_mean(posterior)
+    mean1, mean2 = posterior_means(posterior)
 
     
     
@@ -221,23 +231,41 @@ def corner_plot(posterior: np.ndarray) -> bool :
     best_fit = goodness_of_fit(posterior, False)
     
     fig = corner.corner(
-    posterior[:,:-1],
-    labels=parameter_names,
-    show_titles=True,
-    title_fmt=".2f",
-    title_kwargs={"fontsize": 12},
-    label_kwargs={"fontsize": 14},
-    quantiles=[0.16, 0.5, 0.84],
-    truths=[best_fit[0], best_fit[1]],
-    truth_color='red',
-    plot_datapoints=True,
-    fill_contours=True,
-    levels=[0.68, 0.95],
-    color='blue',
-    alpha=0.5,
-    smooth=1.0,
-    bins=30
-)
+        posterior[:,:-1],
+        labels=parameter_names,
+        show_titles=True,
+        title_fmt=".2f",
+        title_kwargs={"fontsize": 12},
+        label_kwargs={"fontsize": 14},
+        quantiles=[0.16, 0.5, 0.84],
+        truths=[best_fit[0], best_fit[1]],
+        truth_color='red',
+        plot_datapoints=True,
+        fill_contours=True,
+        levels=[0.68, 0.95],
+        color='blue',
+        alpha=0.5,
+        smooth=1.0,
+        bins=30
+    )
+
+    # --- Annotate best-fit values on the diagonal panels (minimal change) ---
+    try:
+        D = posterior.shape[1] - 1  # number of parameters you plotted
+        axes = np.array(fig.axes).reshape(D, D)
+        k = min(D, len(best_fit))
+        for i in range(k):
+            ax = axes[i, i]
+            ax.text(
+                0.02, 0.92, f"best = {best_fit[i]:.4g}",
+                transform=ax.transAxes,
+                color='red',
+                fontsize=7,
+                bbox=dict(boxstyle="round,pad=0.2", facecolor="white", alpha=0.75, lw=0)
+            )
+    except Exception as _:
+        # Don’t kill the plot if corner's axes layout changes; just skip annotation.
+        pass
 
     fig.suptitle(f"Flat {model_name} constraints from 32 CC $H(z)$ data", fontsize=16, y=1.02)
     plt.tight_layout()
@@ -247,6 +275,7 @@ def corner_plot(posterior: np.ndarray) -> bool :
     plt.close()
     
     print(f"[ESG_ANALYSIS]: corner plot generated. {len(posterior)} points plotted.")
+
 
 def one_d_marginals(posterior: np.ndarray) -> bool:
     """
