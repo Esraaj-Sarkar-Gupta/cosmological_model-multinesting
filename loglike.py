@@ -12,6 +12,10 @@ Functions:
     > Guassian (diagonal) likelihood
     > Gaussian (covariance matrix) likelihood -- as of now does not use Cholesky matrices
     
+    > Planck Constraint Loglike
+    > Planck Constraint Gaussian Loglike (uses Planck constraint loglike)
+    > Planck Constraint Gaussian Loglike (with covariance matrix) -- Uses diagonal covmat in parameter space for Planck Constraint
+    
     > Uniform prior transform -- Mirrors the function in the `model` module.
 """
 
@@ -101,7 +105,55 @@ def gaussian_loglike_covmat(
     
     return float(loglike)
     
+# ===========================
+# Planck 2018 Fiducial Model
+# ===========================
+
+PLANCK_H0_MEAN   = 67.36     # km s^-1 Mpc^-1
+PLANCK_H0_SIGMA  = 0.54
+
+PLANCK_OM_MEAN   = 0.3158
+PLANCK_OM_SIGMA  = 0.00738
+
+_planck_mu      = np.array([PLANCK_H0_MEAN, PLANCK_OM_MEAN])
+_planck_sigma   = np.array([PLANCK_H0_SIGMA, PLANCK_OM_SIGMA])
+
+# ---- Planck Diagonal Likelihood ---- #
+def planck_loglike(parameter_list : list) -> float :
+    """
+    This function assumes that the parameters passed are relevant
+    only in the context of the fiducial cosmological model given in
+    Planck 2018.
+    """
     
+    H0 : float = parameter_list[0]
+    Om : float = parameter_list[1]
+    
+    term_H0 : float = (H0 - _planck_mu[0])**2 / _planck_sigma[0]**2
+    term_Om : float = (Om - _planck_mu[1])**2 / _planck_sigma[1]**2
+    
+    return - 0.5 * (term_H0 + term_Om)
+
+
+# ---- Gaussian Likelihood + Planck Constraint ---- #
+
+def planck_gaussian_loglike(
+        cube,
+        ndim,
+        nparams
+        ) -> float :
+    if (nparams != 2):
+        raise Exception("[LogLike]: The planck likelihood expects parameters (2) H0 and Om to constrain your model to the fiducial cosmological model.")
+    return gaussian_loglike(cube, ndim, nparams) + planck_loglike(cube[0:nparams])
+ 
+def planck_gaussian_loglike_covmat(
+        cube,
+        ndim,
+        nparams
+    ) -> float :
+    if (nparams != 2):
+        raise Exception("[LogLike]: The planck likelihood expects parameters (2) H0 and Om to constrain your model to the fiducial cosmological model.")
+    return gaussian_loglike_covmat(cube, ndim, nparams) + planck_loglike(cube[0:nparams])
 
 # ================
 # Prior Transform
