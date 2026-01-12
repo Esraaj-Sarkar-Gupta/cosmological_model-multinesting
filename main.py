@@ -24,13 +24,11 @@ import LCDM as model
 import loglike as loglike
 import ESG_analyzer as anal # oopsie
 
+DATASETNAME = "DESI BAO"
+LIKELIHOOD = loglike.planck_desi_loglike
 
-def main():
-    # ---- Load Data ---- #
-    cc = data.getCCData()
-    z, Hz_obs, sig = cc.z, cc.H, cc.std_err # Unpack cc object
-    print(f"\n[MM]: Loaded {len(z)} CC points (z in interval [{z.min():.3f}, {z.max():.3f}])")
-    
+
+def main():    
     # ---- Check for output directory ---- #
     outdir = Path("chains")
     outdir.mkdir(parents = True, exist_ok = True)
@@ -39,7 +37,7 @@ def main():
     # ---- Run MultiNest ---- #
     print("\n[MM]: Running PyMultiNest... this may take a bit.\n")
     pymultinest.run(
-        loglike.gaussian_loglike,       # Log likelihood
+        LIKELIHOOD,                     # Log likelihood
         loglike.prior_transform,        # Prior transform
         n_dims=2,                       # Dimensionality of parameter space
         outputfiles_basename=basename,  # Basename for output files
@@ -48,7 +46,7 @@ def main():
         seed=24,                        # Sampling seed
         resume=False,                   # Resume (continue from a previous sampling)
     )
-    print(f"[MM]: Finished running PyMultiNest.")
+    print(f"[MM]: Finished running PyMultiNest with {DATASETNAME} data.")
     
     query = input("Continue with analyzer? [Y/n]: ")
     if (query.lower() != 'n'):
