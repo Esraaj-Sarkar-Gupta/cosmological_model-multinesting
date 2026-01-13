@@ -14,7 +14,6 @@ Dependencies:
     > ESG_Analyzer (ESG_Analyzer) -- non-native analyzer
 """
 
-import time
 import numpy as np
 import pymultinest
 from pathlib import Path
@@ -24,8 +23,16 @@ import LCDM as model
 import loglike as loglike
 import ESG_analyzer as anal # oopsie
 
-DATASETNAME = "DESI BAO"
-LIKELIHOOD = loglike.planck_desi_loglike
+DATASETNAME = "ALL"
+LIKELIHOOD = loglike.planck_all_loglike
+DIMS = 3
+
+"""
+Supernova data requires 3 dims (to include an M prior)
+"""
+
+def getDatasetName() -> str:
+    return DATASETNAME
 
 
 def main():    
@@ -39,7 +46,7 @@ def main():
     pymultinest.run(
         LIKELIHOOD,                     # Log likelihood
         loglike.prior_transform,        # Prior transform
-        n_dims=2,                       # Dimensionality of parameter space
+        n_dims=DIMS,                    # Dimensionality of parameter space (NOTE: Require 3 for SN data)
         outputfiles_basename=basename,  # Basename for output files
         n_live_points=1000,             # Number of live points
         verbose=True,                   # Verbose
