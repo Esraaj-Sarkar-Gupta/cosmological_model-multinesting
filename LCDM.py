@@ -21,6 +21,10 @@ All variables of the form _VARIABLE_NAME are editable.
 """
 
 import numpy as np
+from scipy.integrate import quad
+
+#  Physical Constants
+c = 299792.458 # km/s
 
 # Model Name
 _MODEL_NAME = str("Matter Dominated LCDM")
@@ -36,15 +40,53 @@ def Hz(free_parameter, constraint_parameters):
     H0, Omega_m = constraint_parameters
     return H0 * np.sqrt(Omega_m * (1.0 + z)**3 + (1.0 - Omega_m))
 
+# ---- Luminosity Distance ---- #
+"""
+Supernova datasets require forward modelling 
+"""
+
+def dL(z_array : np.ndarray, constraint_parameters) -> np.ndarray:
+    H0, Omega_m = constraint_parameters[0], constraint_parameters[1]
+
+    # Precompute c/H0 
+    hubble_distance = c/H0
+
+    # Physics
+    """
+    dL = (1+z) c/H0 int (0, z) 1 / E(z) dz
+    """
+    def E_inv(z : float) -> float :
+        return 1 / np.sqrt(Omega_m * (1.0 + z)**3 + (1.0 - Omega_m))
+    
+    dL_results : list = list([])
+    for z in z_array:
+        integral, err = quad(E_inv, 0, z)
+        dL_results.append(
+            (1.0 + z) * hubble_distance * integral
+        )
+
+    return np.array(dL_results)
+
 # ==================
 # Prior Transforms
 # ==================
 
-_PARAM_ORDER = ("H0", "Omega_m")
+_PARAM_ORDER = ("H0", "Omega_m", "M")
 _PRIORS= dict({
     "H0" : (40.0, 100.0),
-    "Omega_m" : (0.01, 0.8)
+    "Omega_m" : (0.01, 0.8),
+    "M" : (-20.0, -18.0) # Absolute magnitude for supernova data
     })
+
+"""
+ NOTE: The prior for the absolute magnitude M here is chosen arbitrarily 
+ around the value -19.25  which is the value used by the SH0ES team in their 
+ 2022 paper.
+
+ Cite: A Comprehensive Measurement of the Local Value of the Hubble Constant with 
+ 1 km s−1 Mpc−1 Uncertainty from the Hubble Space Telescope and the SH0ES Team
+ by Adam G. Riess et. al.
+"""
 
 def prior_transform(cube):
     """
@@ -76,7 +118,7 @@ class data:
     # ---- Parameter Data ---- #
     
     def get_param_names(self) -> list :
-        return self.parameters
+        return self.param_names
     
     def get_priors(self) -> list :
         prior_limits = list([])
