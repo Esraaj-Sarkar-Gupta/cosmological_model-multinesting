@@ -73,7 +73,7 @@ def dL(z_array : np.ndarray, constraint_parameters) -> np.ndarray:
 
 _PARAM_ORDER = ("H0", "Omega_m", "M")
 _PRIORS= dict({
-    "H0" : (40.0, 100.0),
+    "H0" : (50.0, 80.0),
     "Omega_m" : (0.01, 0.8),
     "M" : (-20.0, -18.0) # Absolute magnitude for supernova data
     })
