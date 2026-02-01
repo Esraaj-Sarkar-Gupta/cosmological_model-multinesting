@@ -15,8 +15,6 @@ import numpy as np
 import pymultinest
 from pathlib import Path
 
-import ccData as data
-import LCDM as model
 import loglike as loglike
 import ESG_analyzer as anal 
 
@@ -58,7 +56,7 @@ def main():
         print(f"[MM]: Job Start: {name} (Dims={dims})")
         print("="*40)
         
-        """
+        
         # -- Run Sampler -- #
         pymultinest.run(
             likelihood,
@@ -70,7 +68,7 @@ def main():
             seed=42,
             resume=False
         )
-        """
+        
         # -- Extract Data -- #
         analyzer = pymultinest.Analyzer(n_params=dims, outputfiles_basename=basename)
         posterior = analyzer.get_equal_weighted_posterior()
@@ -91,7 +89,7 @@ def main():
     DATASETNAME = "Combined_Comparison" 
     
     # Call the new comparison function
-    anal.comparison_plot(all_posteriors)
+    anal.comparison_plot_hist2d(all_posteriors)
     
     print("\n[MM]: Analysis Complete.")
 

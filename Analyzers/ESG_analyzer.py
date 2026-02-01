@@ -30,9 +30,8 @@ import os
 import matplotlib.lines as mlines
 from getdist import plots, MCSamples
 
-
-import LCDM as model
-import ccData as data
+# --- Model Name --- #
+from Models import LCDM as model
 
 # ---- Helper for Dataset Name (Avoids Circular Import) ---- #
 def get_dataset_name_safe():
@@ -371,7 +370,7 @@ def comparison_plot_hist2d(posteriors_dict : dict) -> bool:
             plot_density=False,
             levels=[0.10, 0.68, 0.95], # 1 and 2 sigma
             smooth=1.0,
-            bins=20,
+            bins=100,
             alpha=0.20,
             fill_contours=True
         )
