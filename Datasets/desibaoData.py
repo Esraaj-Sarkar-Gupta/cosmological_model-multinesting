@@ -28,23 +28,23 @@ tracer_names : list = list([
 ])
 
 data_paths : dict = dict({
-    "BGS":      Path("desibaoData/desi_2024_gaussian_bao_BGS_BRIGHT-21.5_GCcomb_z0.1-0.4_mean.txt"),
-    "LRG1":     Path("desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.4-0.6_mean.txt"),
-    "LRG2":     Path("desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.6-0.8_mean.txt"),
-    "LRG+ELG":  Path("desibaoData/desi_2024_gaussian_bao_LRG+ELG_LOPnotqso_GCcomb_z0.8-1.1_mean.txt"),
-    "ELG":      Path("desibaoData/desi_2024_gaussian_bao_ELG_LOPnotqso_GCcomb_z1.1-1.6_mean.txt"),
-    "Lya":      Path("desibaoData/desi_2024_gaussian_bao_Lya_GCcomb_mean.txt"),
-    "QSO":      Path("desibaoData/desi_2024_gaussian_bao_QSO_GCcomb_z0.8-2.1_mean.txt"),
+    "BGS":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_BGS_BRIGHT-21.5_GCcomb_z0.1-0.4_mean.txt"),
+    "LRG1":     Path("Datasets/desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.4-0.6_mean.txt"),
+    "LRG2":     Path("Datasets/desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.6-0.8_mean.txt"),
+    "LRG+ELG":  Path("Datasets/desibaoData/desi_2024_gaussian_bao_LRG+ELG_LOPnotqso_GCcomb_z0.8-1.1_mean.txt"),
+    "ELG":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_ELG_LOPnotqso_GCcomb_z1.1-1.6_mean.txt"),
+    "Lya":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_Lya_GCcomb_mean.txt"),
+    "QSO":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_QSO_GCcomb_z0.8-2.1_mean.txt"),
 })
 
 covmat_paths : dict = dict({
-    "BGS":      Path("desibaoData/desi_2024_gaussian_bao_BGS_BRIGHT-21.5_GCcomb_z0.1-0.4_cov.txt"),
-    "LRG1":     Path("desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.4-0.6_cov.txt"),
-    "LRG2":     Path("desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.6-0.8_cov.txt"),
-    "LRG+ELG":  Path("desibaoData/desi_2024_gaussian_bao_LRG+ELG_LOPnotqso_GCcomb_z0.8-1.1_cov.txt"),
-    "ELG":      Path("desibaoData/desi_2024_gaussian_bao_ELG_LOPnotqso_GCcomb_z1.1-1.6_cov.txt"),
-    "Lya":      Path("desibaoData/desi_2024_gaussian_bao_Lya_GCcomb_cov.txt"),
-    "QSO":      Path("desibaoData/desi_2024_gaussian_bao_QSO_GCcomb_z0.8-2.1_cov.txt"),
+    "BGS":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_BGS_BRIGHT-21.5_GCcomb_z0.1-0.4_cov.txt"),
+    "LRG1":     Path("Datasets/desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.4-0.6_cov.txt"),
+    "LRG2":     Path("Datasets/desibaoData/desi_2024_gaussian_bao_LRG_GCcomb_z0.6-0.8_cov.txt"),
+    "LRG+ELG":  Path("Datasets/desibaoData/desi_2024_gaussian_bao_LRG+ELG_LOPnotqso_GCcomb_z0.8-1.1_cov.txt"),
+    "ELG":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_ELG_LOPnotqso_GCcomb_z1.1-1.6_cov.txt"),
+    "Lya":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_Lya_GCcomb_cov.txt"),
+    "QSO":      Path("Datasets/desibaoData/desi_2024_gaussian_bao_QSO_GCcomb_z0.8-2.1_cov.txt"),
 })
 
 # ---- Loading Functions ---- #

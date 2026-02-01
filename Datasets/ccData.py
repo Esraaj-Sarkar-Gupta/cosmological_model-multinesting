@@ -22,8 +22,8 @@ import os
 # ---- Find and Read Data Files ---- #
 
 pwd = os.getcwd()
-path_data = pwd + "/ccData/HzTable_MM_BC32.txt"
-path_bias = pwd + "/ccData/data_MM20.dat"
+path_data = pwd + "/Datasets/ccData/HzTable_MM_BC32.txt"
+path_bias = pwd + "/Datasets/ccData/data_MM20.dat"
 
 _DATA = np.genfromtxt(path_data) # Extract CC data
 zmod, imf, slib, sps, spsooo = np.genfromtxt(path_bias, comments='#', usecols=(0,1,2,3,4), unpack=True)  # Get results from Moresco et. al. 2020

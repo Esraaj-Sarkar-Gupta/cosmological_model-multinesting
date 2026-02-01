@@ -8,8 +8,8 @@ Import binned Pantheon+ data
 Reference: 
 """
 
-DATA_PATH   : Path = Path("binnedpantheonplusData/lcparam_DS17f.txt")
-COVMAT_PATH : Path = Path("binnedpantheonplusData/sys_DS17f.txt")
+DATA_PATH   : Path = Path("Datasets/binnedpantheonplusData/lcparam_DS17f.txt")
+COVMAT_PATH : Path = Path("Datasets/binnedpantheonplusData/sys_DS17f.txt")
 
 # ---- Physics ---- #
 
